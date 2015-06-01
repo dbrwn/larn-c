@@ -105,7 +105,7 @@ odeadthrone(void)
 				k = rnd(101);
 				if (k < 35) {
 					lprcat("\nZaaaappp!  You've been teleported!\n");
-					beep();
+					emit_beep();
 					oteleport(0);
 				} else
 					lprcat("\nnothing happens");

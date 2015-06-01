@@ -150,7 +150,7 @@ lookforobject(void)
 
 	case OTELEPORTER:
 		lprcat("\nZaaaappp!  You've been teleported!\n");
-		beep();
+		emit_beep();
 		nap(3000);
 		oteleport(0);
 		break;
@@ -334,7 +334,7 @@ lookforobject(void)
 		}
 		if (packweight() > 45 + 3 * (c[STRENGTH] + c[STREXTRA])) {
 			lprcat("\nYou slip and fall down the shaft");
-			beep();
+			emit_beep();
 			lastnum = 275;
 			losehp(30 + rnd(20));
 			bottomhp();
@@ -374,7 +374,7 @@ lookforobject(void)
 		}
 		if (packweight() > 45 + 5 * (c[STRENGTH] + c[STREXTRA])) {
 			lprcat("\nYou slip and fall down the shaft");
-			beep();
+			emit_beep();
 			lastnum = 275;
 			losehp(15 + rnd(20));
 			bottomhp();
@@ -406,7 +406,7 @@ lookforobject(void)
 
 	case OTRAPARROW:
 		lprcat("\nYou are hit by an arrow");
-		beep();		/* for an arrow trap */
+		emit_beep();		/* for an arrow trap */
 		lastnum = 259;
 		losehp(rnd(10) + level);
 		bottomhp();
@@ -420,7 +420,7 @@ lookforobject(void)
 
 	case ODARTRAP:
 		lprcat("\nYou are hit by a dart");
-		beep();		/* for a dart trap */
+		emit_beep();		/* for a dart trap */
 		lastnum = 260;
 		losehp(rnd(5));
 		if ((--c[STRENGTH]) < 3)
@@ -438,12 +438,12 @@ lookforobject(void)
 		lastnum = 272;	/* a trap door */
 		if ((level == MAXLEVEL - 1) || (level == MAXLEVEL + MAXVLEVEL - 1)) {
 			lprcat("\nYou fell through a bottomless trap door!");
-			beep();
+			emit_beep();
 			nap(3000);
 			died(271);
 		}
 		lprcat("\nYou fall through a trap door!");
-		beep();		/* for a trap door */
+		emit_beep();		/* for a trap door */
 		losehp(rnd(5 + level));
 		nap(2000);
 		newcavelevel(level + 1);
@@ -1128,7 +1128,7 @@ static void
 obottomless(void)
 {
 	lprcat("\nYou fell into a bottomless pit!");
-	beep();
+	emit_beep();
 	nap(3000);
 	died(262);
 }
@@ -1270,7 +1270,7 @@ ohome(void)
 				iven[i] = 0;	/* remove the potion of cure
 						 * dianthroritis from
 						 * inventory */
-				clear();
+				do_clear();
 				lprcat("Congratulations.  You found a potion of cure dianthroritis.\n");
 				lprcat("\nFrankly, No one thought you could do it.  Boy!  Did you surprise them!\n");
 				if (gltime > TIMELIMIT) {
@@ -1286,13 +1286,13 @@ ohome(void)
 					nap(3000);
 					lprcat(" working!  The doctor thinks that\n");
 					lprcat("your daughter will recover in a few days.  Congratulations!\n");
-					beep();
+					emit_beep();
 					nap(5000);
 					died(263);
 				}
 			}
 	while (1) {
-		clear();
+		do_clear();
 		lprintf("Welcome home %s.  Latest word from the doctor is not good.\n", logname);
 
 		if (gltime > TIMELIMIT) {
@@ -1307,9 +1307,9 @@ ohome(void)
 		lprcat("potion of cure dianthroritis.  It is rumored that only deep in the\n");
 		lprcat("depths of the caves can this potion be found.\n\n\n");
 		lprcat("\n     ----- press ");
-		standout("return");
+		print_standout("return");
 		lprcat(" to continue, ");
-		standout("escape");
+		print_standout("escape");
 		lprcat(" to leave ----- ");
 		i = ttgetch();
 		while (i != '\33' && i != '\n')

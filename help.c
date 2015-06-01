@@ -36,7 +36,7 @@ help(void)
 	for (i = 0; i < 23; i++)
 		lgetl();	/* skip over intro message */
 	for (; j > 0; j--) {
-		clear();
+		do_clear();
 		for (i = 0; i < 23; i++)
 #ifdef VT100
 			lprcat(lgetl());	/* print out each line that
@@ -49,9 +49,9 @@ help(void)
 #endif	/* VT100 */
 		if (j > 1) {
 			lprcat("    ---- Press ");
-			standout("return");
+			print_standout("return");
 			lprcat(" to exit, ");
-			standout("space");
+			print_standout("space");
 			lprcat(" for more help ---- ");
 			i = 0;
 			while ((i != ' ') && (i != '\n') && (i != '\33'))
@@ -82,7 +82,7 @@ welcome(void)
 #endif	/* VT100 */
 	if (openhelp() < 0)
 		return;		/* open the help file */
-	clear();
+	do_clear();
 	for (i = 0; i < 23; i++)
 #ifdef VT100
 		lprcat(lgetl());/* print out each line that we read in */
@@ -104,7 +104,7 @@ retcont(void)
 {
 	cursor(1, 24);
 	lprcat("Press ");
-	standout("return");
+	print_standout("return");
 	lprcat(" to continue: ");
 	while (ttgetch() != '\n');
 	setscroll();

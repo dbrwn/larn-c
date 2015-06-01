@@ -2,7 +2,7 @@
 
 /*
  * global.c 		Larn is copyrighted 1986 by Noah Morgan.
- * 
+ *
  * raiselevel()		subroutine to raise the player one level
  * loselevel()		subroutine to lower the player by one level
  * raiseexperience(x)	subroutine to increase experience points
@@ -81,7 +81,7 @@ raiseexperience(long x)
 	}
 	if (c[LEVEL] != i) {
 		cursors();
-		beep();
+		emit_beep();
 		lprintf("\nWelcome to level %ld", (long) c[LEVEL]);	/* if we changed levels	 */
 	}
 	bottomline();
@@ -111,7 +111,7 @@ loseexperience(long x)
 	}
 	if (i != c[LEVEL]) {
 		cursors();
-		beep();
+		emit_beep();
 		lprintf("\nYou went down to level %ld!", (long) c[LEVEL]);
 	}
 	bottomline();
@@ -128,7 +128,7 @@ void
 losehp(int x)
 {
 	if ((c[HP] -= x) <= 0) {
-		beep();
+		emit_beep();
 		lprcat("\n");
 		nap(3000);
 		died(lastnum);
@@ -408,7 +408,7 @@ void
 more(void)
 {
 	lprcat("\n  --- press ");
-	standout("space");
+	print_standout("space");
 	lprcat(" to continue --- ");
 	while (ttgetch() != ' ');
 }
@@ -499,7 +499,7 @@ drop_object(int k)
 		return (1);
 	}
 	if (item[playerx][playery]) {
-		beep();
+		emit_beep();
 		lprcat("\nThere's something here already");
 		return (1);
 	}
@@ -534,7 +534,7 @@ enchantarmor(void)
 	if (c[WEAR] < 0) {
 		if (c[SHIELD] < 0) {
 			cursors();
-			beep();
+			emit_beep();
 			lprcat("\nYou feel a sense of loss");
 			return;
 		} else {
@@ -563,7 +563,7 @@ enchweapon(void)
 	int    tmp;
 	if (c[WIELD] < 0) {
 		cursors();
-		beep();
+		emit_beep();
 		lprcat("\nYou feel a sense of loss");
 		return;
 	}

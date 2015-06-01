@@ -225,7 +225,7 @@ outofstock(void)
 	nap(2200);
 }
 
-static void 
+static void
 nogold(void)
 {
 	lprcat("\nYou don't have enough gold to pay for that!");
@@ -239,16 +239,16 @@ dndstore(void)
 	int    i;
 	dnditm = 0;
 	nosignal = 1;		/* disable signals */
-	clear();
+	do_clear();
 	dnd_2hed();
 	if (outstanding_taxes > 0) {
 		lprcat("\n\nThe Larn Revenue Service has ordered us to not do business with tax evaders.\n");
-		beep();
+		emit_beep();
 		lprintf("They have also told us that you owe %ld gp in back taxes, and as we must\n", (long) outstanding_taxes);
 		lprcat("comply with the law, we cannot serve you at this time.  Soo Sorry.\n");
 		cursors();
 		lprcat("\nPress ");
-		standout("escape");
+		print_standout("escape");
 		lprcat(" to leave: ");
 		lflush();
 		i = 0;
@@ -265,15 +265,15 @@ dndstore(void)
 		cltoeoln();
 		cl_dn(1, 20);	/* erase to eod */
 		lprcat("\nEnter your transaction [");
-		standout("space");
+		print_standout("space");
 		lprcat(" for more, ");
-		standout("escape");
+		print_standout("escape");
 		lprcat(" to leave]? ");
 		i = 0;
 		while ((i < 'a' || i > 'z') && (i != ' ') && (i != '\33') && (i != 12))
 			i = ttgetch();
 		if (i == 12) {
-			clear();
+			do_clear();
 			dnd_2hed();
 			dnd_hed();
 		} else if (i == '\33') {
@@ -354,7 +354,7 @@ static char coursetime[] = {10, 15, 10, 20, 10, 10, 10, 5};
 static void
 sch_hed(void)
 {
-	clear();
+	do_clear();
 	lprcat("The College of Larn offers the exciting opportunity of higher education to\n");
 	lprcat("all inhabitants of the caves.  Here is a list of the class schedule:\n\n\n");
 	lprcat("\t\t    Course Name \t       Time Needed\n\n");
@@ -400,7 +400,7 @@ oschool(void)
 		lprintf("%ld gold pieces.   ", (long) c[GOLD]);
 		cursors();
 		lprcat("\nWhat is your choice [");
-		standout("escape");
+		print_standout("escape");
 		lprcat(" to leave] ? ");
 		yrepcount = 0;
 		i = 0;
@@ -528,18 +528,18 @@ static void
 banktitle(const char *str)
 {
 	nosignal = 1;		/* disable signals */
-	clear();
+	do_clear();
 	lprcat(str);
 	if (outstanding_taxes > 0) {
 		int    i;
 		lprcat("\n\nThe Larn Revenue Service has ordered that your account be frozen until all\n");
-		beep();
+		emit_beep();
 		lprintf("levied taxes have been paid.  They have also told us that you owe %ld gp in\n", (long) outstanding_taxes);
 		lprcat("taxes, and we must comply with them. We cannot serve you at this time.  Sorry.\n");
 		lprcat("We suggest you go to the LRS office and pay your taxes.\n");
 		cursors();
 		lprcat("\nPress ");
-		standout("escape");
+		print_standout("escape");
 		lprcat(" to leave: ");
 		lflush();
 		i = 0;
@@ -614,13 +614,13 @@ obanksub(void)
 	while (1) {
 		cl_dn(1, 20);
 		lprcat("\nYour wish? [(");
-		standout("d");
+		print_standout("d");
 		lprcat(") deposit, (");
-		standout("w");
+		print_standout("w");
 		lprcat(") withdraw, (");
-		standout("s");
+		print_standout("s");
 		lprcat(") sell a stone, or ");
-		standout("escape");
+		print_standout("escape");
 		lprcat("]  ");
 		yrepcount = 0;
 		i = 0;
@@ -747,7 +747,7 @@ appraise(int gemstone)
 static void
 otradhead(void)
 {
-	clear();
+	do_clear();
 	lprcat("Welcome to the Larn Trading Post.  We buy items that explorers no longer find\n");
 	lprcat("useful.  Since the condition of the items you bring in is not certain,\n");
 	lprcat("and we incur great expense in reconditioning the items, we usually pay\n");
@@ -765,9 +765,9 @@ otradepost(void)
 	otradhead();
 	while (1) {
 		lprcat("\nWhat item do you want to sell to us [");
-		standout("*");
+		print_standout("*");
 		lprcat(" for list, or ");
-		standout("escape");
+		print_standout("escape");
 		lprcat("] ? ");
 		i = 0;
 		while (i > 'z' || (i < 'a' && i != '*' && i != '\33' && i != '.'))
@@ -793,7 +793,7 @@ otradepost(void)
 			}	/* can't sell unidentified item */
 		if (!j) {
 			if (i == '*') {
-				clear();
+				do_clear();
 				qshowstr();
 				otradhead();
 			} else if (iven[isub] == 0)
@@ -857,7 +857,7 @@ olrs(void)
 	int    i, first;
 	long   amt;
 	first = nosignal = 1;	/* disable signals */
-	clear();
+	do_clear();
 	resetscroll();
 	cursor(1, 4);
 	lprcat("Welcome to the Larn Revenue Service district office.  How can we help you?");
@@ -868,9 +868,9 @@ olrs(void)
 		}
 		cursors();
 		lprcat("\n\nYour wish? [(");
-		standout("p");
+		print_standout("p");
 		lprcat(") pay taxes, or ");
-		standout("escape");
+		print_standout("escape");
 		lprcat("]  ");
 		yrepcount = 0;
 		i = 0;

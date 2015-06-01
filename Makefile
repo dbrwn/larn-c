@@ -55,12 +55,10 @@
 # NOLOG
 #	Turn off logging.
 
-.include <bsd.own.mk>
-
-PROG=	larn
-MAN=	larn.6
-CPPFLAGS+=-DBSD -DVER=12 -DSUBVER=0 -DNONAP -DUIDSCORE -DTERMIOS
-SRCS=	main.c object.c create.c tok.c display.c global.c data.c io.c \
+#PROG=	larn
+#MAN=	larn.6
+#CPPFLAGS+=-DBSD -DVER=12 -DSUBVER=0 -DNONAP -DUIDSCORE -DTERMIOS
+#SRCS=	main.c object.c create.c tok.c display.c global.c data.c io.c \
 	monster.c store.c diag.c help.c config.c nap.c bill.c scores.c \
 	signal.c action.c moreobj.c movem.c regen.c fortune.c savelev.c
 DPADD=	${LIBTERMINFO}
@@ -68,13 +66,37 @@ LDADD=	-lterminfo
 HIDEGAME=hidegame
 SETGIDGAME=yes
 
-.if ${MKSHARE} != "no"
-DAT=larnmaze larnopts larn.help
-FILES=${DAT:S@^@${.CURDIR}/datfiles/@g}
-FILESDIR=/usr/share/games/larn
-.endif
+#ifneq ${MKSHARE} "no"
+#DAT=larnmaze larnopts larn.help
+#FILES=${DAT:S@^@${.CURDIR}/datfiles/@g}
+#FILESDIR=/usr/share/games/larn
+#endif
 
-COPTS.display.c += -Wno-format-nonliteral
-COPTS.monster.c += -Wno-format-nonliteral
+#COPTS.display.c += -Wno-format-nonliteral
+#COPTS.monster.c += -Wno-format-nonliteral
 
-.include <bsd.prog.mk>
+CC=gcc
+#CFLAGS=-DBSD -DVER=12 -DSUBVER=0 -DNONAP -DUIDSCORE -DTERMIOS
+CFLAGS=-DBSD -DVER=12 -DSUBVER=0 -DNONAP -DUIDSCORE
+
+ODIR=obj
+LDIR =
+
+LIBS=-lc -lncurses
+
+DEPS = extern.h header.h pathnames.h
+
+OBJ = main.o object.o create.o tok.o display.o global.o data.o io.o \
+	monster.o store.o diag.o help.o config.o nap.o bill.o scores.o \
+	signal.o action.o moreobj.o movem.o regen.o fortune.o savelev.o
+
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+larn: $(OBJ)
+	gcc -o $@ $^ $(CFLAGS) $(LIBS)
+
+.PHONY: clean
+
+clean:
+	rm -f *.o ./larn

@@ -33,7 +33,7 @@ makeplayer(void)
 {
 	int i;
 	scbr();
-	clear();
+	do_clear();
 	c[HPMAX] = c[HP] = 10;	/* start player off with 15 hit points	 */
 	c[LEVEL] = 1;		/* player starts at level one		 */
 	c[SPELLMAX] = c[SPELLS] = 1;	/* total # spells starts off as 3 */

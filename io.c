@@ -2,62 +2,62 @@
 
 /*
  * io.c			 Larn is copyrighted 1986 by Noah Morgan.
- * 
+ *
  * Below are the functions in this file:
- * 
+ *
  * setupvt100() 	Subroutine to set up terminal in correct mode for game
  * clearvt100()  	Subroutine to clean up terminal when the game is over
  * ttgetch() 		Routine to read in one character from the terminal
  * scbr()			Function to set cbreak -echo for the terminal
  * sncbr()			Function to set -cbreak echo for the terminal
  * newgame() 		Subroutine to save the initial time and seed rnd()
- * 
+ *
  * FILE OUTPUT ROUTINES
- * 
+ *
  * lprintf(format,args . . .)	printf to the output buffer lprint(integer)
  * end binary integer to output buffer lwrite(buf,len)
  * rite a buffer to the output buffer lprcat(str)
  * ent string to output buffer
- * 
+ *
  * FILE OUTPUT MACROS (in header.h)
- * 
+ *
  * lprc(character)				put the character into the output
  * buffer
- * 
+ *
  * FILE INPUT ROUTINES
- * 
+ *
  * long lgetc()				read one character from input buffer
  * long larn_lrint()			read one integer from input buffer
  * lrfill(address,number)		put input bytes into a buffer char
  * *lgetw()				get a whitespace ended word from
  * input char *lgetl()				get a \n or EOF ended line
  * from input
- * 
+ *
  * FILE OPEN / CLOSE ROUTINES
- * 
+ *
  * lcreat(filename)			create a new file for write
  * lopen(filename)				open a file for read
  * lappend(filename)			open for append to an existing file
  * lrclose()					close the input file
  * lwclose()					close output file lflush()
  * lush the output buffer
- * 
+ *
  * Other Routines
- * 
+ *
  * cursor(x,y)					position cursor at [x,y]
  * cursors()					position cursor at [1,24]
  * (saves memory) cl_line(x,y)         		Clear line at [1,y] and leave
  * cursor at [x,y] cl_up(x,y)    				Clear screen
  * from [x,1] to current line. cl_dn(x,y)
- * lear screen from [1,y] to end of display. standout(str)
+ * lear screen from [1,y] to end of display. print_standout(str)
  * rint the string in standout mode. set_score_output()
  * alled when output should be literally printed. * ttputch(ch)
  * rint one character in decoded output buffer. * flush_buf()
  * lush buffer with decoded output. * init_term()
  * erminal initialization -- setup termcap info *	char *tmcapcnv(sd,ss)
- * outine to convert VT100 \33's to termcap format beep()
+ * outine to convert VT100 \33's to termcap format emit_beep()
  * e to emit a beep if enabled (see no-beep in .larnopts)
- * 
+ *
  * Note: ** entries are available only in termcap mode.
  */
 #include <sys/cdefs.h>
@@ -71,10 +71,13 @@ __RCSID("$NetBSD: io.c,v 1.27 2012/06/19 05:30:43 dholland Exp $");
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <term.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <ctype.h>
+
+#include <time.h>
+#include <ncurses.h>
+#include <term.h>
 
 #ifdef TERMIO
 #include <termio.h>
@@ -146,7 +149,7 @@ static char     lgetwbuf[LINBUFSIZE];	/* get line (word) buffer */
 void
 setupvt100(void)
 {
-	clear();
+	do_clear();
 	setscroll();
 	scbr();			/* system("stty cbreak -echo"); */
 }
@@ -160,7 +163,7 @@ void
 clearvt100(void)
 {
 	resetscroll();
-	clear();
+	do_clear();
 	sncbr();		/* system("stty -cbreak echo"); */
 }
 
@@ -323,7 +326,7 @@ lwrite(char *buf, int len)
  *
  *  Returns 0 if EOF, otherwise the character
  */
-long 
+long
 lgetc(void)
 {
 	int    i;
@@ -355,7 +358,7 @@ lgetc(void)
  *	The save order is low order first, to high order (4 bytes total)
  *	Returns the int read
  */
-long 
+long
 larn_lrint(void)
 {
 	unsigned long i;
@@ -733,10 +736,10 @@ cl_dn(int x, int y)
 }
 
 /*
- * standout(str)	Print the argument string in inverse video (standout mode).
+ * print_standout(str)	Print the argument string in inverse video (standout mode).
  */
 void
-standout(const char *str)
+print_standout(const char *str)
 {
 #ifdef VT100
 	setbold();
@@ -819,7 +822,7 @@ lflush(void)
 				case CURSOR:
 					curx = *++str - 1;
 					cury = *++str - 1;
-					tputs(tiparm(cursor_address,
+					tputs(tparm(cursor_address,
 						    cury, curx), 0, ttputch);
 					break;
 
@@ -833,7 +836,7 @@ lflush(void)
 
 							if (++scrline > 23)
 								scrline = 19;
-							tputs(tiparm(
+							tputs(tparm(
 							    cursor_address,
 							    scrline, 0),
 							    0, ttputch);
@@ -842,20 +845,20 @@ lflush(void)
 
 							if (--scrline < 19)
 								scrline = 23;
-							tputs(tiparm(
+							tputs(tparm(
 							    cursor_address,
 							    scrline, 0),
 							    0, ttputch);
 							tputs(clr_eol, 0,
 							    ttputch);
 						} else {
-							tputs(tiparm(
+							tputs(tparm(
 							    cursor_address,
 							    19, 0),
 							    0, ttputch);
 							tputs(delete_line, 0,
 							    ttputch);
-							tputs(tiparm(
+							tputs(tparm(
 							    cursor_address,
 							    23, 0),
 							    0, ttputch);
@@ -906,7 +909,7 @@ static int      vindex = 0;
 /*
  * ttputch(ch)		Print one character in decoded output buffer.
  */
-static int 
+static int
 ttputch(int ch)
 {
 	outbuf[vindex++] = ch;
@@ -981,10 +984,10 @@ tmcapcnv(char *sd, char *ss)
 #endif	/* VT100 */
 
 /*
- *	beep()	Routine to emit a beep if enabled (see no-beep in .larnopts)
+ *	emit_beep()	Routine to emit a beep if enabled (see no-beep in .larnopts)
  */
 void
-beep(void)
+emit_beep(void)
 {
 	if (!nobeep)
 		*lpnt++ = '\7';

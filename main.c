@@ -221,7 +221,7 @@ main(int argc, char **argv)
 			};
 
 		if (argv[i][0] == '+') {
-			clear();
+			do_clear();
 			restorflag = 1;
 			if (argv[i][1] == '+') {
 				hitflag = 1;
@@ -263,7 +263,7 @@ main(int argc, char **argv)
 #endif	/* HIDEBYLINK */
 
 	if (access(savefilename, 0) == 0) {	/* restore game if need to */
-		clear();
+		do_clear();
 		restorflag = 1;
 		hitflag = 1;
 		restoregame(savefilename);	/* restore last game	 */
@@ -374,7 +374,7 @@ t_setup(int count)
 		cursor(1, 1);
 	} else {
 		resetscroll();
-		clear();
+		do_clear();
 	}
 }
 
@@ -639,7 +639,7 @@ show3(int indx)
 	if (++srcount >= 22) {
 		srcount = 0;
 		more();
-		clear();
+		do_clear();
 	}
 }
 
@@ -787,7 +787,7 @@ parse(void)
 			return;	/* give the help screen */
 
 		case 'S':
-			clear();
+			do_clear();
 			lprcat("Saving . . .");
 			lflush();
 			savegame(savefilename);

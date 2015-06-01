@@ -69,7 +69,7 @@ act_sit_throne(int arg)
 		know[playerx][playery] = 0;
 	} else if (k < 35) {
 		lprcat("\nZaaaappp!  You've been teleported!\n");
-		beep();
+		emit_beep();
 		oteleport(0);
 	} else
 		lprcat("\nnothing happens");
@@ -87,7 +87,7 @@ act_drink_fountain(void)
 
 	if (rnd(1501) < 2) {
 		lprcat("\nOops!  You seem to have caught the dreadful sleep!");
-		beep();
+		emit_beep();
 		lflush();
 		sleep(3);
 		died(280);
@@ -269,7 +269,7 @@ act_open_chest(int x, int y)
 	k = rnd(101);
 	if (k < 40) {
 		lprcat("\nThe chest explodes as you open it");
-		beep();
+		emit_beep();
 		i = rnd(10);
 		lastnum = 281;	/* in case he dies */
 		lprintf("\nYou suffer %ld hit points damage!", (long) i);
@@ -279,18 +279,18 @@ act_open_chest(int x, int y)
 		case 1:
 			c[ITCHING] += rnd(1000) + 100;
 			lprcat("\nYou feel an irritation spread over your skin!");
-			beep();
+			emit_beep();
 			break;
 
 		case 2:
 			c[CLUMSINESS] += rnd(1600) + 200;
 			lprcat("\nYou begin to lose hand to eye coordination!");
-			beep();
+			emit_beep();
 			break;
 
 		case 3:
 			c[HALFDAM] += rnd(1600) + 200;
-			beep();
+			emit_beep();
 			lprcat("\nA sickness engulfs you!");
 			break;
 		};

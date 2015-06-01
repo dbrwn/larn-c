@@ -146,7 +146,7 @@ createmonster(int mon)
 	int    x, y, k, i;
 	if (mon < 1 || mon > MAXMONST + 8) {	/* check for monster number
 						 * out of bounds */
-		beep();
+		emit_beep();
 		lprintf("\ncan't createmonst(%ld)\n", (long) mon);
 		nap(3000);
 		return;
@@ -494,7 +494,7 @@ speldamage(int x)
 
 	case 26:
 		if (rnd(151) == 63) {
-			beep();
+			emit_beep();
 			lprcat("\nYour heart stopped!\n");
 			nap(4000);
 			died(270);
@@ -533,7 +533,7 @@ speldamage(int x)
 	case 32:
 		if ((rnd(23) == 5) && (wizard == 0)) {	/* sphere of
 							 * annihilation */
-			beep();
+			emit_beep();
 			lprcat("\nYou have been enveloped by the zone of nothingness!\n");
 			nap(4000);
 			died(258);
@@ -562,7 +562,7 @@ speldamage(int x)
 			return;
 		}
 		lprcat("  The demon turned on you and vanished!");
-		beep();
+		emit_beep();
 		i = rnd(40) + 30;
 		lastnum = 277;
 		losehp(i);	/* must say killed by a demon */
@@ -640,7 +640,7 @@ speldamage(int x)
 
 	default:
 		lprintf("  spell %ld not available!", (long) x);
-		beep();
+		emit_beep();
 		return;
 	};
 }
@@ -668,7 +668,7 @@ isconfuse(void)
 {
 	if (c[CONFUSE]) {
 		lprcat(" You can't aim your magic!");
-		beep();
+		emit_beep();
 	}
 	return (c[CONFUSE]);
 }
@@ -738,7 +738,7 @@ direct(int spnum, int dam, const char *str, int arg)
 	if (item[x][y] == OMIRROR) {
 		if (spnum == 3) {	/* sleep */
 			lprcat("You fall asleep! ");
-			beep();
+			emit_beep();
 	fool:
 			arg += 2;
 			while (arg-- > 0) {
@@ -748,12 +748,12 @@ direct(int spnum, int dam, const char *str, int arg)
 			return;
 		} else if (spnum == 6) {	/* web */
 			lprcat("You get stuck in your own web! ");
-			beep();
+			emit_beep();
 			goto fool;
 		} else {
 			lastnum = 278;
 			lprintf(str, "spell caster (that's you)", (long) arg);
-			beep();
+			emit_beep();
 			losehp(dam);
 			return;
 		}
@@ -816,7 +816,7 @@ godirect(int spnum, int dam, const char *str, int delay, int cshow_i)
 		if ((x == playerx) && (y == playery)) {	/* if energy hits player */
 			cursors();
 			lprcat("\nYou are hit by your own magic!");
-			beep();
+			emit_beep();
 			lastnum = 278;
 			losehp(dam);
 			return;
@@ -1139,7 +1139,7 @@ hitmonster(int x, int y)
 			if (c[WIELD] > 0)
 				if (ivenarg[c[WIELD]] > -10) {
 					lprintf("\nYour weapon is dulled by the %s", lastmonst);
-					beep();
+					emit_beep();
 					--ivenarg[c[WIELD]];
 				}
 	if (flag)
@@ -1543,7 +1543,7 @@ spattack(int x, int xx, int yy)
 				break;
 			}
 		else {
-			beep();
+			emit_beep();
 			p = "\nThe %s hit you -- your armor feels weaker";
 		}
 		break;
@@ -1556,7 +1556,7 @@ spout:		p = "\nThe %s breathes fire at you!";
 		else
 spout2:	if (p) {
 			lprintf(p, lastmonst);
-			beep();
+			emit_beep();
 		}
 		checkloss(i);
 		return (0);
@@ -1568,7 +1568,7 @@ spout2:	if (p) {
 	case 4:
 		if (c[STRENGTH] > 3) {
 			p = "\nThe %s stung you!  You feel weaker";
-			beep();
+			emit_beep();
 			--c[STRENGTH];
 		} else
 			p = "\nThe %s stung you!";
@@ -1582,7 +1582,7 @@ spout2:	if (p) {
 	case 6:
 		lprintf("\nThe %s drains you of your life energy!", lastmonst);
 		loselevel();
-		beep();
+		emit_beep();
 		return (0);
 
 	case 7:
@@ -1605,7 +1605,7 @@ spout2:	if (p) {
 			p = "\nThe %s couldn't find any gold to steal";
 		lprintf(p, lastmonst);
 		disappear(xx, yy);
-		beep();
+		emit_beep();
 		bottomgold();
 		return (1);
 
@@ -1618,7 +1618,7 @@ spout2:	if (p) {
 					ivenarg[i] = 0;
 				lprintf("\nThe %s hits you -- you feel a sense of loss", lastmonst);
 				srcount = 0;
-				beep();
+				emit_beep();
 				show3(i);
 				bottomline();
 				return (0);
@@ -1638,7 +1638,7 @@ spout2:	if (p) {
 
 	case 11:
 		p = "\nThe %s has confused you";
-		beep();
+		emit_beep();
 		c[CONFUSE] += 10 + rnd(10);
 		break;
 
@@ -1659,7 +1659,7 @@ spout2:	if (p) {
 			break;
 		}
 		lprintf("\nThe %s picks your pocket and takes:", lastmonst);
-		beep();
+		emit_beep();
 		if (stealsomething() == 0)
 			lprcat("  nothing");
 		disappear(xx, yy);
@@ -1766,7 +1766,7 @@ newsphere(int x, int y, int dir, int life)
 		show1cell(x, y);/* show the demon (ha ha) */
 		cursors();
 		lprintf("\nThe %s dispels the sphere!", monster[m].name);
-		beep();
+		emit_beep();
 		rmsphere(x, y);	/* remove any spheres that are here */
 		free(sp);
 		return (c[SPHCAST]);
@@ -1774,7 +1774,7 @@ newsphere(int x, int y, int dir, int life)
 	if (m == DISENCHANTRESS) {	/* disenchantress cancels spheres */
 		cursors();
 		lprintf("\nThe %s causes cancellation of the sphere!", monster[m].name);
-		beep();
+		emit_beep();
 boom:		sphboom(x, y);	/* blow up stuff around sphere */
 		rmsphere(x, y);	/* remove any spheres that are here */
 		free(sp);
@@ -1783,14 +1783,14 @@ boom:		sphboom(x, y);	/* blow up stuff around sphere */
 	if (c[CANCELLATION]) {	/* cancellation cancels spheres */
 		cursors();
 		lprcat("\nAs the cancellation takes effect, you hear a great earth shaking blast!");
-		beep();
+		emit_beep();
 		goto boom;
 	}
 	if (item[x][y] == OANNIHILATION) {	/* collision of spheres
 						 * detonates spheres */
 		cursors();
 		lprcat("\nTwo spheres of annihilation collide! You hear a great earth shaking blast!");
-		beep();
+		emit_beep();
 		rmsphere(x, y);
 		goto boom;
 	}
@@ -1798,7 +1798,7 @@ boom:		sphboom(x, y);	/* blow up stuff around sphere */
 						 * player! */
 		cursors();
 		lprcat("\nYou have been enveloped by the zone of nothingness!\n");
-		beep();
+		emit_beep();
 		rmsphere(x, y);	/* remove any spheres that are here */
 		nap(4000);
 		died(258);
@@ -1876,7 +1876,7 @@ sphboom(int x, int y)
 			show1cell(j, i);
 			if (playerx == j && playery == i) {
 				cursors();
-				beep();
+				emit_beep();
 				lprcat("\nYou were too close to the sphere!");
 				nap(3000);
 				died(283);	/* player killed in explosion */

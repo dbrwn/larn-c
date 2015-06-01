@@ -289,7 +289,7 @@ drawscreen(void)
 					 * object printing */
 	if (d_xmin == 0 && d_xmax == MAXX && d_ymin == 0 && d_ymax == MAXY) {
 		d_flag = 1;
-		clear();	/* clear the screen */
+		do_clear();	/* clear the screen */
 	} else {
 		d_flag = 0;
 		cursor(1, 1);
@@ -562,7 +562,7 @@ seemagic(int arg)
 		cursor(1, 1);
 	} else {
 		resetscroll();
-		clear();
+		do_clear();
 	}
 
 	lprcat("The magic spells you have discovered thus far:\n\n");
@@ -624,7 +624,7 @@ seepage(void)
 		if (lincount > 17) {
 			lincount = 0;
 			more();
-			clear();
+			do_clear();
 		}
 	}
 }

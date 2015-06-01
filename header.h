@@ -402,7 +402,7 @@ extern int      rmst, lasttime;
 /* macro to clear the scrolling region for the terminal */
 #define resetscroll() (lprcat("\33[;24r"))
 /* macro to clear the screen and home the cursor */
-#define clear() (lprcat("\33[2J\33[f"), cbak[SPELLS]= -50)
+#define do_clear() (lprcat("\33[2J\33[f"), cbak[SPELLS]= -50)
 #define cltoeoln() lprcat("\33[K")
 #else	/* VT100 */
 /* defines below are for use in the termcap mode only */
@@ -423,7 +423,7 @@ extern int      rmst, lasttime;
 /* macro to clear the scrolling region for the terminal */
 #define resetscroll() enable_scroll=0
 /* macro to clear the screen and home the cursor */
-#define clear() (*lpnt++ =CLEAR, cbak[SPELLS]= -50)
+#define do_clear() (*lpnt++ =CLEAR, cbak[SPELLS]= -50)
 /* macro to clear to end of line */
 #define cltoeoln() (*lpnt++ = CL_LINE)
 #endif	/* VT100 */

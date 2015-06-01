@@ -367,16 +367,16 @@ mmove(int aa, int bb, int cc, int dd)
 		switch (flag) {
 		case 1:
 			lprintf("\n%s hits the %s", who, monster[tmp].name);
-			beep();
+			emit_beep();
 			break;
 		case 2:
 			lprintf("\n%s hits and kills the %s",
 			    who, monster[tmp].name);
-			beep();
+			emit_beep();
 			break;
 		case 3:
 			lprintf("\nThe %s gets teleported", monster[tmp].name);
-			beep();
+			emit_beep();
 			break;
 		}
 	}

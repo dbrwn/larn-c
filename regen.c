@@ -82,13 +82,13 @@ regen(void)
 		if (--d[BLINDCOUNT] <= 0) {
 			cursors();
 			lprcat("\nThe blindness lifts  ");
-			beep();
+			emit_beep();
 		}
 	if (d[CONFUSE])
 		if (--d[CONFUSE] <= 0) {
 			cursors();
 			lprcat("\nYou regain your senses");
-			beep();
+			emit_beep();
 		}
 	if (d[GIANTSTR])
 		if (--d[GIANTSTR] <= 0) {
@@ -143,14 +143,14 @@ regen(void)
 		if (--d[HALFDAM] <= 0) {
 			cursors();
 			lprcat("\nYou now feel better ");
-			beep();
+			emit_beep();
 		}
 	if (d[SEEINVISIBLE])
 		if (--d[SEEINVISIBLE] <= 0) {
 			monstnamelist[INVISIBLESTALKER] = ' ';
 			cursors();
 			lprcat("\nYou feel your vision return to normal");
-			beep();
+			emit_beep();
 		}
 	if (d[ITCHING]) {
 		if (d[ITCHING] > 1)
@@ -159,14 +159,14 @@ regen(void)
 					d[WEAR] = d[SHIELD] = -1;
 					cursors();
 					lprcat("\nThe hysteria of itching forces you to remove your armor!");
-					beep();
+					emit_beep();
 					recalc();
 					bottomline();
 				}
 		if (--d[ITCHING] <= 0) {
 			cursors();
 			lprcat("\nYou now feel the irritation subside!");
-			beep();
+			emit_beep();
 		}
 	}
 	if (d[CLUMSINESS]) {
@@ -179,7 +179,7 @@ regen(void)
 		if (--d[CLUMSINESS] <= 0) {
 			cursors();
 			lprcat("\nYou now feel less awkward!");
-			beep();
+			emit_beep();
 		}
 	}
 	if (flag)

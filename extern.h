@@ -136,11 +136,11 @@ void init_term(void);
 void cl_line(int, int);
 void cl_up(int, int);
 void cl_dn(int, int);
-void standout(const char *);
+void print_standout(const char *);
 void set_score_output(void);
 void lflush(void);
 char *tmcapcnv(char *, char *);
-void beep(void);
+void emit_beep(void);
 
 /* main.c */
 int main(int, char **);
